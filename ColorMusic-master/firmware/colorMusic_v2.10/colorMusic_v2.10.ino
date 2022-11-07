@@ -217,9 +217,9 @@ void setup() {
   pinMode(RELAY2, OUTPUT);          
   digitalWrite(RELAY2, 1);          
   pinMode(RELAY3, OUTPUT);          
-  digitalWrite(RELAY3, 1);            
+  digitalWrite(RELAY3, 0);            
   pinMode(RELAY4, OUTPUT);          
-  digitalWrite(RELAY4, 1);                  
+  digitalWrite(RELAY4, 0);                  
 
   pinMode(MCU_EN, INPUT);  
   pinMode(MCU_CLK, INPUT); 
@@ -321,10 +321,10 @@ void mcuProtocol() {
 
 void mcuModeRelay(){
   if (message == 0b00000000) {
-    digitalWrite(RELAY1, 0);          
-    digitalWrite(RELAY2, 0);        
-    digitalWrite(RELAY3, 1);
-    digitalWrite(RELAY4, 1);       
+    digitalWrite(RELAY1, 1);          
+    digitalWrite(RELAY2, 1);        
+    digitalWrite(RELAY3, 0);
+    digitalWrite(RELAY4, 0);       
   } else {
     digitalWrite(RELAY1, 0);          
     digitalWrite(RELAY2, 0);        
@@ -340,14 +340,10 @@ void mcuModeLight(){
       this_mode = 6;
       freq_strobe_mode = 0;
       light_mode = 0;
-    } else if (bit_is_clear(message, 0) && bit_is_clear(message, 1) && bit_is_set(message, 2))  {           // Режим изменения цвета;
-      this_mode = 6;
-      freq_strobe_mode = 0;
-      light_mode = 0;
-    } else if (bit_is_clear(message, 0) && bit_is_set(message, 1) && bit_is_set(message, 2))  {             // Режим изменения скорости;
-      this_mode = 6;
-      freq_strobe_mode = 0;
-      light_mode = 0;
+    } else if ((bitRead(message, 0) == 0) && (bitRead(message, 1) == 0) && (bitRead(message, 2) == 1))  {           // Режим изменения цвета;
+      BRIGHTNESS = (message - 32) * 8;
+    } else if ((bitRead(message, 0) == 0) && (bitRead(message, 1) == 1) && (bitRead(message, 2) == 1))  {             // Режим изменения скорости;
+      COLOR_SPEED = (message - 96) * 8;
     } 
 //    
 //    else if (message == 0b00100001) {           // Влево

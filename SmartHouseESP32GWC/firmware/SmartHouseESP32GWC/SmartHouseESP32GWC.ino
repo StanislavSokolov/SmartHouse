@@ -145,7 +145,7 @@ void loop() {
     message = 0b00100000;
     int j = 4;
     for (int i = 29; i < 34; i++) {
-      if (req[i] = '0') {
+      if (req[i] == '1') {
         bitSet(message, j);
       }
       j = j - 1;
